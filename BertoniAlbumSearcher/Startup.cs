@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Clients;
+using Clients.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,16 +25,10 @@ namespace BertoniAlbumSearcher
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-            });
+            services.AddHttpClient<IAlbumClient, AlbumClient>();
 
-
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson();
-            services.AddRazorPages();
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+                       .AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

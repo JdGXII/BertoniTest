@@ -1,29 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BertoniAlbumSearcher.Models;
+using Models.Responses;
+using Clients;
 
 namespace BertoniAlbumSearcher.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AlbumClient _albumClient;
+
+        public HomeController(AlbumClient albumClient)
+        {
+            _albumClient = albumClient;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        #region API Methods
+
+        [HttpGet]
+        public async Task<List<AlbumResponse>> GetAlbums()
         {
-            return View();
+            return await _albumClient.GetAlbums();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public async Task<List<PhotoResponse>> GetPhotos(int? albumId)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return await _albumClient.GetPhotos(albumId);
         }
+
+        #endregion
+
     }
 }
