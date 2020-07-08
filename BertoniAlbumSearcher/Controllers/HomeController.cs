@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Models.Responses;
 using Clients;
+using Clients.Interface;
 
 namespace BertoniAlbumSearcher.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly AlbumClient _albumClient;
+        private readonly IAlbumClient _albumClient;
 
-        public HomeController(AlbumClient albumClient)
+        public HomeController(IAlbumClient albumClient)
         {
             _albumClient = albumClient;
         }

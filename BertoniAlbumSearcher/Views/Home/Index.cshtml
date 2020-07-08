@@ -2,7 +2,35 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Lista albumes</h1>
+<div><button onclick="searchAlbums()">Ver albumes</button></div>
+<div id="albumList"></div>
+
+<script>
+    const searchAlbums = async () => {
+        const response = await fetch('/Home/GetAlbums');
+        const myJson = await response.json();
+        var htmlResponse = "";
+        for (i = 0; i < myJson.length; i++) {
+            htmlResponse = `${htmlResponse}
+                           <div>
+                            <span>Nombre: ${myJson[i].title} </span><a onclick="searchPhotos(${myJson[i].id})" href=#>Visualizar Albúm.</a>
+                            <div id="photoList${myJson[i].id}"></div>
+                           </div>`
+        }
+        console.log(htmlResponse);
+        document.getElementById("albumList").innerHTML = htmlResponse;
+    }
+
+    const searchPhotos = async (albumId) => {
+        const response = await fetch(`/Home/GetPhotos?albumId=${albumId}`);
+        const myJson = await response.json();
+        var htmlResponse = "";
+        for (i = 0; i < myJson.length; i++) {
+            htmlResponse = `${htmlResponse}<div><img src=${myJson[i].thumbnailUrl} /></div>`
+        }
+        console.log(htmlResponse);
+        document.getElementById(`photoList${albumId}`).innerHTML = htmlResponse;
+    }
+
+</script>
